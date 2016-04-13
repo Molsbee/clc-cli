@@ -1,11 +1,11 @@
 package command
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/codegangsta/cli"
 	"github.com/molsbee/clc-cli/api"
+	"github.com/molsbee/clc-cli/json"
 )
 
 // ServerCommand Commands related to server functions
@@ -36,9 +36,7 @@ func detailsCommand() cli.Command {
 			}
 
 			details := server.Get()
-
-			json, _ := json.MarshalIndent(details, "", "  ")
-			fmt.Println(string(json))
+			fmt.Println(json.PrettyPrint(details))
 		},
 	}
 }
@@ -54,12 +52,12 @@ func credentialsCommand() cli.Command {
 				return
 			}
 
-			server := api.Server{Name: serverAlias}
+			server := api.Server{
+				Name: serverAlias,
+			}
 
 			credentials := server.GetCredentials()
-
-			json, _ := json.MarshalIndent(credentials, "", "  ")
-			fmt.Print(string(json))
+			fmt.Println(json.PrettyPrint(credentials))
 		},
 	}
 }
