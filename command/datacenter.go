@@ -35,13 +35,13 @@ func get() cli.Command {
 			}
 
 			details := dataCenter.Get()
-			fmt.Printf("ID:          %s\n", details.ID)
-			fmt.Printf("Name:        %s\n", details.Name)
+			fmt.Printf("ID:\t%s\n", details.ID)
+			fmt.Printf("Name:\t%s\n", details.Name)
 			for _, element := range details.Links {
 				if element.Rel == "group" {
 					fmt.Println("Group")
-					fmt.Printf("     Name:  %s\n", element.Name)
-					fmt.Printf("     ID:    %s\n", element.ID)
+					fmt.Printf("\tName:\t%s\n", element.Name)
+					fmt.Printf("\tID:\t%s\n", element.ID)
 				}
 			}
 		},
@@ -57,7 +57,7 @@ func list() cli.Command {
 
 			dataCenters := dataCenter.List()
 			for _, element := range dataCenters {
-				fmt.Printf("ID: %s     Name: %s\n", element.ID, element.Name)
+				fmt.Printf("ID: %s\t\tName: %s\n", element.ID, element.Name)
 			}
 		},
 	}
