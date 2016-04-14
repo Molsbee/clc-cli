@@ -23,9 +23,8 @@ func GetWithAuthentication(endpoint string, resp interface{}) {
 		log.Fatalln("Errer received while performing clc api request", err)
 	}
 	defer response.Body.Close()
-
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		log.Fatal("Non 200 status code received from api")
+		log.Fatalf("Non %d status code received from api\n", response.StatusCode)
 	}
 
 	body, err := ioutil.ReadAll(response.Body)

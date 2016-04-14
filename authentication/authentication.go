@@ -16,11 +16,7 @@ import (
 var Auth = model.AuthenticationResponse{}
 
 func init() {
-	fileData, err := ioutil.ReadFile(config.FilePath())
-	if err != nil {
-		// Do Something
-	}
-
+	fileData, _ := ioutil.ReadFile(config.FilePath())
 	json.Unmarshal(fileData, &Auth)
 }
 
