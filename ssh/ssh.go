@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/molsbee/clc-cli/server"
+	"github.com/molsbee/clc-cli/api"
 
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/terminal"
@@ -20,8 +20,12 @@ var terminalModes = ssh.TerminalModes{
 
 // Connect Create SSH Connection to Server Provided
 func Connect(serverAlias string) {
-	serverCredentials := server.GetCredentials(serverAlias)
-	ipAddress := server.GetDetails(serverAlias).Details.IPAddresses[0].Internal
+	server := api.Server{
+		Name: serverAlias,
+	}
+
+	serverCredentials := server.GetCredentials()
+	ipAddress := server.Get().Details.IPAddresses[0].Internal
 
 	config := &ssh.ClientConfig{
 		User: serverCredentials.Username,
