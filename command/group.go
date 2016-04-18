@@ -24,38 +24,37 @@ func GroupCommand() cli.Command {
 func details() cli.Command {
 	return cli.Command{
 		Name:  "details",
-		Usage: "Retuner details of Data Center Groups",
+		Usage: "Returns details of Data Center Groups",
+		Flags: []cli.Flag{
+			cli.StringFlag{
+				Name:  "data-center",
+				Usage: "Data Center Name ex: UC1",
+			},
+			cli.StringFlag{
+				Name:  "group-id",
+				Usage: "Group ID that needs details",
+			},
+		},
 		Action: func(ctx *cli.Context) {
-			groupID := ctx.Args().Get(0)
+			groupID := ctx.String("group-id")
+
+			dataCenter := ctx.String("data-center")
+			if dataCenter != "" {
+				dataCenterDetails := api.DataCenter{Name: dataCenter}
+				for _, element := range dataCenterDetails.Get().Links {
+					if element.Rel == "group" {
+						groupID = element.ID
+						break
+					}
+				}
+			}
+
 			if groupID == "" {
 				cli.ShowCommandHelp(ctx, "details")
 				return
 			}
 
-			group := api.Group{
-				ID: groupID,
-			}
-
-			details := group.Get()
-			fmt.Printf("ID:\t\t%s\n", details.ID)
-			fmt.Printf("Name:\t\t%s\n", details.Name)
-			fmt.Printf("Server Count:\t%d\n", details.ServersCount)
-			for _, group := range details.Groups {
-				fmt.Println("Group")
-				fmt.Printf("\tID:\t\t%s\n", group.ID)
-				fmt.Printf("\tName:\t\t%s\n", group.Name)
-				fmt.Printf("\tServer Count:\t%d\n", group.ServersCount)
-				if group.ServersCount != 0 {
-					fmt.Printf("\tServers\n")
-				}
-				for _, link := range group.Links {
-					if link.Rel == server {
-						fmt.Printf("\t\tID: %s\n", link.ID)
-					}
-				}
-
-			}
-
+			fmt.Println(api.Group{ID: groupID}.Get())
 		},
 	}
 }
@@ -64,10 +63,32 @@ func getGroupServers() cli.Command {
 	return cli.Command{
 		Name:  "servers",
 		Usage: "Return Servers within Data Center Group",
+		Flags: []cli.Flag{
+			cli.StringFlag{
+				Name:  "data-center",
+				Usage: "Data Center Name ex: UC1",
+			},
+			cli.StringFlag{
+				Name:  "group-id",
+				Usage: "Group ID that needs details",
+			},
+		},
 		Action: func(ctx *cli.Context) {
-			groupID := ctx.Args().Get(0)
+			groupID := ctx.String("group-id")
+
+			dataCenter := ctx.String("data-center")
+			if dataCenter != "" {
+				dataCenterDetails := api.DataCenter{Name: dataCenter}
+				for _, element := range dataCenterDetails.Get().Links {
+					if element.Rel == "group" {
+						groupID = element.ID
+						break
+					}
+				}
+			}
+
 			if groupID == "" {
-				cli.ShowCommandHelp(ctx, "details")
+				cli.ShowCommandHelp(ctx, "servers")
 				return
 			}
 
@@ -75,21 +96,8 @@ func getGroupServers() cli.Command {
 				ID: groupID,
 			}
 
-			details := group.Get()
-
 			fmt.Println("Servers")
-			for _, link := range details.Links {
-				if link.Rel == server {
-					fmt.Printf("\tID: %s\n", link.ID)
-				}
-			}
-			for _, group := range details.Groups {
-				for _, link := range group.Links {
-					if link.Rel == server {
-						fmt.Printf("\tID: %s\n", link.ID)
-					}
-				}
-			}
+			fmt.Print(group.Get().GetServers())
 		},
 	}
 }
