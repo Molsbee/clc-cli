@@ -48,12 +48,12 @@ func (a AuthenticationResponse) DecodeBearerToken() (*BearerTokenDetails, error)
 
 // BearerTokenDetails Decode information from Second Section of BearerToken
 type BearerTokenDetails struct {
-	ISS             string `json:"iss"`
-	AUD             string `json:"aud"`
-	NBF             int64  `json:"nbf"`
-	EXP             int64  `json:"exp"`
-	UniqueName      string `json:"unique_name"`
-	AccountAlias    string `json:"urn:tier3:account-alias"`
-	DefaultLocation string `json:"urn:tier3:location-alias"`
-	Role            string `json:"role"`
+	ISS             string   `json:"iss"`
+	AUD             string   `json:"aud"`
+	NBF             int64    `json:"nbf"`
+	EXP             int64    `json:"exp"`
+	UniqueName      string   `json:"unique_name"`
+	AccountAlias    string   `json:"urn:tier3:account-alias"`
+	DefaultLocation string   `json:"urn:tier3:location-alias"`
+	Role            []string `json:"role"`
 }
