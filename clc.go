@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+	tokenDetails, tokenError := authentication.Auth.DecodeBearerToken()
+
 	app := cli.NewApp()
 	app.Name = "CLC CLI"
 	app.Usage = "Helper CLI for accessing CLC Resources"
@@ -18,19 +20,17 @@ func main() {
 	app.Before = func(ctx *cli.Context) error {
 		command := ctx.Args().First()
 
-		tokenDetails, err := authentication.Auth.DecodeBearerToken()
-		if err != nil && command != "login" {
-			fmt.Println("top")
-			return fmt.Errorf("Please use Login command to authenticate with CLC")
-		} else if err == nil {
-			experation := time.Unix(tokenDetails.EXP, 0)
-			if time.Now().After(experation) {
+		if command != "login" {
+			if tokenError != nil {
 				return fmt.Errorf("Please use Login command to authenticate with CLC")
 			}
-
-			app.UsageText = "\tCurrent User: " + tokenDetails.UniqueName + "\n\tAccount: " + tokenDetails.AccountAlias
+			experation := time.Unix(tokenDetails.EXP, 0)
+			if time.Now().After(experation) {
+				return fmt.Errorf("Please use login command to authenticate with CLC bearer token expired %s", experation)
+			}
 		}
 
+		app.UsageText = "\tCurrent User: " + tokenDetails.UniqueName + "\n\tAccount: " + tokenDetails.AccountAlias
 		return nil
 	}
 

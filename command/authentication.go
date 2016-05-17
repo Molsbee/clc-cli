@@ -13,17 +13,17 @@ func Login() cli.Command {
 	return cli.Command{
 		Name:  "login",
 		Usage: "Authenticate with CLC V2 API",
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			username := ctx.Args().Get(0)
 			if username == "" {
-				cli.ShowCommandHelp(ctx, "login")
-				return
+				return cli.ShowCommandHelp(ctx, "login")
 			}
 
 			fmt.Printf("Password: ")
 			password, _ := gopass.GetPasswd()
 
 			authentication.Authenticate(username, string(password))
+			return nil
 		},
 	}
 }

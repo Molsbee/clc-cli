@@ -11,14 +11,14 @@ func SSHCommand() cli.Command {
 		Name:        "ssh",
 		Usage:       "Connect to CLC Server with SSH",
 		Description: "Example: clc ssh {{server alias}}",
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			serverAlias := ctx.Args().Get(0)
 			if serverAlias == "" {
-				cli.ShowCommandHelp(ctx, "ssh")
-				return
+				return cli.ShowCommandHelp(ctx, "ssh")
 			}
 
 			ssh.Connect(serverAlias)
+			return nil
 		},
 	}
 }

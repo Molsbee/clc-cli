@@ -35,7 +35,7 @@ func details() cli.Command {
 				Usage: "Group ID that needs details",
 			},
 		},
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			groupID := ctx.String("group-id")
 
 			dataCenter := ctx.String("data-center")
@@ -50,11 +50,11 @@ func details() cli.Command {
 			}
 
 			if groupID == "" {
-				cli.ShowCommandHelp(ctx, "details")
-				return
+				return cli.ShowCommandHelp(ctx, "details")
 			}
 
 			fmt.Println(api.Group{ID: groupID}.Get())
+			return nil
 		},
 	}
 }
@@ -73,7 +73,7 @@ func getGroupServers() cli.Command {
 				Usage: "Group ID that needs details",
 			},
 		},
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			groupID := ctx.String("group-id")
 
 			dataCenter := ctx.String("data-center")
@@ -88,8 +88,7 @@ func getGroupServers() cli.Command {
 			}
 
 			if groupID == "" {
-				cli.ShowCommandHelp(ctx, "servers")
-				return
+				return cli.ShowCommandHelp(ctx, "servers")
 			}
 
 			group := api.Group{
@@ -98,6 +97,7 @@ func getGroupServers() cli.Command {
 
 			fmt.Println("Servers")
 			fmt.Print(group.Get().GetServers())
+			return nil
 		},
 	}
 }

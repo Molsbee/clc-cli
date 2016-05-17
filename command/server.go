@@ -24,11 +24,10 @@ func detailsCommand() cli.Command {
 	return cli.Command{
 		Name:  "details",
 		Usage: "Return Server Details",
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			serverAlias := ctx.Args().Get(0)
 			if serverAlias == "" {
-				cli.ShowCommandHelp(ctx, "details")
-				return
+				return cli.ShowCommandHelp(ctx, "details")
 			}
 
 			server := api.Server{
@@ -37,6 +36,7 @@ func detailsCommand() cli.Command {
 
 			details := server.Get()
 			fmt.Println(json.PrettyPrint(details))
+			return nil
 		},
 	}
 }
@@ -45,11 +45,10 @@ func credentialsCommand() cli.Command {
 	return cli.Command{
 		Name:  "credentials",
 		Usage: "Return Server Credentials",
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			serverAlias := ctx.Args().Get(0)
 			if serverAlias == "" {
-				cli.ShowCommandHelp(ctx, "credentials")
-				return
+				return cli.ShowCommandHelp(ctx, "credentials")
 			}
 
 			server := api.Server{
@@ -58,6 +57,7 @@ func credentialsCommand() cli.Command {
 
 			credentials := server.GetCredentials()
 			fmt.Println(json.PrettyPrint(credentials))
+			return nil
 		},
 	}
 }

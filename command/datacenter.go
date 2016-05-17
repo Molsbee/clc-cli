@@ -23,14 +23,14 @@ func get() cli.Command {
 	return cli.Command{
 		Name:  "details",
 		Usage: "Return Data Center Details",
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			name := ctx.Args().Get(0)
 			if name == "" {
-				cli.ShowCommandHelp(ctx, "details")
-				return
+				return cli.ShowCommandHelp(ctx, "details")
 			}
 
 			fmt.Println(api.DataCenter{Name: name}.Get())
+			return nil
 		},
 	}
 }
@@ -39,8 +39,9 @@ func list() cli.Command {
 	return cli.Command{
 		Name:  "list",
 		Usage: "Return List of Data Centers with Details",
-		Action: func(ctx *cli.Context) {
+		Action: func(ctx *cli.Context) error {
 			fmt.Println(api.DataCenter{}.List())
+			return nil
 		},
 	}
 }
