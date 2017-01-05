@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 	"github.com/molsbee/clc-cli/authentication"
 	"github.com/molsbee/clc-cli/command"
 )

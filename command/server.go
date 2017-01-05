@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/molsbee/clc-cli/api"
 	"github.com/molsbee/clc-cli/json"
+	"github.com/urfave/cli"
 )
 
 // ServerCommand Commands related to server functions

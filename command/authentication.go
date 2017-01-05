@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/howeyc/gopass"
 	"github.com/molsbee/clc-cli/authentication"
+	"github.com/urfave/cli"
 )
 
 // Login Commands related to Authenticating with CLC

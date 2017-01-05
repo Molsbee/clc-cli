@@ -3,8 +3,8 @@ package command
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/molsbee/clc-cli/api"
+	"github.com/urfave/cli"
 )
 
 // DataCenterCommand Commands related to Data Center functions

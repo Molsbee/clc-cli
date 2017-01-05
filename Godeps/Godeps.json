@@ -1,16 +1,19 @@
 {
 	"ImportPath": "github.com/molsbee/clc-cli",
-	"GoVersion": "go1.6",
-	"GodepVersion": "v62",
+	"GoVersion": "go1.7",
+	"GodepVersion": "v75",
+	"Packages": [
+		"./..."
+	],
 	"Deps": [
-		{
-			"ImportPath": "github.com/codegangsta/cli",
-			"Comment": "v1.17.0-21-g0eb4e0b",
-			"Rev": "0eb4e0be6c214f8904ef6989b11072c7b897c657"
-		},
 		{
 			"ImportPath": "github.com/howeyc/gopass",
 			"Rev": "66487b23f2880ba32e185121d2cd51a338ea069a"
+		},
+		{
+			"ImportPath": "github.com/urfave/cli",
+			"Comment": "v1.19.1",
+			"Rev": "0bdeddeeb0f650497d603c4ad7b20cfe685682f6"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/curve25519",

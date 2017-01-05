@@ -1,8 +1,8 @@
 package command
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/molsbee/clc-cli/ssh"
+	"github.com/urfave/cli"
 )
 
 // SSHCommand Commands related to creating ssh connection to CLC Server
