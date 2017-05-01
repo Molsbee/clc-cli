@@ -24,7 +24,7 @@ func GetWithAuthentication(endpoint string, resp interface{}) {
 	}
 	defer response.Body.Close()
 	if response.StatusCode < 200 || response.StatusCode > 299 {
-		log.Fatalf("Non %d status code received from api\n", response.StatusCode)
+		log.Fatalf("Non 2XX status code received (%d) from api endpoint (%s)\n", response.StatusCode, endpoint)
 	}
 
 	body, err := ioutil.ReadAll(response.Body)

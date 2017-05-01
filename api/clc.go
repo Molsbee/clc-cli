@@ -8,7 +8,7 @@ type BaseRequest struct {
 
 func (b BaseRequest) GetAccountAlias() string {
 	if b.AccountAlias == "" {
-		return authentication.Auth.BearerToken
+		return authentication.Auth.AccountAlias
 	}
 
 	return b.AccountAlias
