@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/molsbee/clc-cli/config"
 	"github.com/molsbee/clc-cli/constants"
 	"github.com/molsbee/clc-cli/model"
+	"fmt"
 )
 
 // Auth AuthenticationResponse Store on Local FileSystem
@@ -20,8 +20,8 @@ func init() {
 	json.Unmarshal(fileData, &Auth)
 }
 
-// Authenticate Authenticate with CLC API
-func Authenticate(username string, password string) {
+// Authenticate performs a login request to CLC V2 Api with username and password provided
+func Authenticate(username string, password string) (err error) {
 	authenticationRequest := &model.AuthenticationRequest{
 		Username: username,
 		Password: password,
@@ -31,13 +31,19 @@ func Authenticate(username string, password string) {
 	req, _ := http.NewRequest("POST", constants.ClcAPIEndpoint+"/authentication/login", bytes.NewBuffer(authRequest))
 	req.Header.Add("Content-Type", "application/json")
 
-	resp, _ := constants.Client.Do(req)
+	resp, err := constants.Client.Do(req)
+	if err != nil {
+		err = fmt.Errorf("Authentiication request failed - %v", err)
+	}
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
-	if resp.StatusCode != 200 {
-		log.Fatalln("Failed to Authenticate with API")
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil || resp.StatusCode != 200 {
+		err = fmt.Errorf("Failed to authenticate user %s", username)
 	}
 
-	ioutil.WriteFile(config.FilePath(), body, 0777)
+	if err == nil {
+		ioutil.WriteFile(config.FilePath(), body, 0777)
+	}
+	return
 }

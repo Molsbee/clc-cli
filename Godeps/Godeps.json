@@ -8,7 +8,7 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/howeyc/gopass",
-			"Rev": "66487b23f2880ba32e185121d2cd51a338ea069a"
+			"Rev": "f5387c492211eb133053880d23dfae62aa14123d"
 		},
 		{
 			"ImportPath": "github.com/urfave/cli",
@@ -17,15 +17,27 @@
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/curve25519",
-			"Rev": "3760e016850398b85094c4c99e955b8c3dea5711"
+			"Rev": "5b4074c2c416448b5d06e287167144493aabda43"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/ssh",
-			"Rev": "3760e016850398b85094c4c99e955b8c3dea5711"
+			"Rev": "5b4074c2c416448b5d06e287167144493aabda43"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/ssh/terminal",
-			"Rev": "3760e016850398b85094c4c99e955b8c3dea5711"
+			"Rev": "5b4074c2c416448b5d06e287167144493aabda43"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "d75a52659825e75fff6158388dddc6a5b04f9ba5"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ed25519",
+			"Rev": "5b4074c2c416448b5d06e287167144493aabda43"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/ed25519/internal/edwards25519",
+			"Rev": "5b4074c2c416448b5d06e287167144493aabda43"
 		}
 	]
 }

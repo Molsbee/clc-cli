@@ -25,7 +25,7 @@ type AuthenticationResponse struct {
 // DecodeBearerToken Returns a decoded bearer token details
 func (a AuthenticationResponse) DecodeBearerToken() (*BearerTokenDetails, error) {
 	if a.BearerToken == "" {
-		return nil, fmt.Errorf("PreAuthentication failed please reauthenticate")
+		return nil, fmt.Errorf("PreAuthentication failed please re-authenticate")
 	}
 
 	bearerToken := strings.Split(a.BearerToken, ".")[1]
