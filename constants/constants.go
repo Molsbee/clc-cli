@@ -3,12 +3,14 @@ package constants
 import "net/http"
 
 var (
-	// ClcAPIEndpoint Base Endpoint for CLC API
 	ClcAPIEndpoint = "https://api.ctl.io/v2"
-
-	// ClcAuthenticaitonEndpoint Authenticaiton Endpoint
 	ClcAuthenticaitonEndpoint = ClcAPIEndpoint + "/authentication/login"
 
-	// Client Global Http Client
+	RDBS = map[string]string{
+		"DEV": "https://api-dv.rdbs.ctl.io",
+		"QA": "https://api-qa.rdbs.ctl.io",
+		"PROD": "https://api.rdbs.ctl.io",
+	}
+
 	Client = &http.Client{}
 )

@@ -40,6 +40,7 @@ func main() {
 		command.DataCenterCommand(),
 		command.GroupCommand(),
 		command.SSHCommand(),
+		command.RdbsCommand(),
 	}
 
 	app.Run(os.Args)
