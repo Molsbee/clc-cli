@@ -5,13 +5,22 @@ import (
 	"os"
 	"time"
 
-	"github.com/urfave/cli"
-	"github.com/molsbee/clc-cli/authentication"
+	"encoding/json"
 	"github.com/molsbee/clc-cli/command"
+	"github.com/molsbee/clc-cli/config"
+	"github.com/molsbee/clc-cli/model"
+	"github.com/molsbee/clc-cli/service/clc"
+	"github.com/molsbee/clc-cli/service/rdbs"
+	"github.com/urfave/cli"
+	"io/ioutil"
 )
 
 func main() {
-	tokenDetails, tokenError := authentication.Auth.DecodeBearerToken()
+	auth := parseConfigFileForAuthDetails()
+	tokenDetails, tokenError := auth.DecodeBearerToken()
+
+	clcAPI := clc.NewAPI(auth)
+	rdbsAPI := rdbs.NewAPI(auth)
 
 	app := cli.NewApp()
 	app.Name = "CLC CLI"
@@ -35,14 +44,21 @@ func main() {
 	}
 
 	app.Commands = []cli.Command{
-		command.Login(),
-		command.ServerCommand(),
-		command.DataCenterCommand(),
-		command.GroupCommand(),
-		command.SSHCommand(),
-		command.RdbsCommand(),
+		command.Login(clcAPI),
+		command.ServerCommand(clcAPI),
+		command.DataCenterCommand(clcAPI),
+		command.GroupCommand(clcAPI),
+		command.SSHCommand(clcAPI),
+		command.RdbsCommand(rdbsAPI),
 	}
 
 	app.Run(os.Args)
 	fmt.Println()
+}
+
+func parseConfigFileForAuthDetails() model.AuthenticationResponse {
+	fileData, _ := ioutil.ReadFile(config.FilePath())
+	auth := model.AuthenticationResponse{}
+	json.Unmarshal(fileData, &auth)
+	return auth
 }

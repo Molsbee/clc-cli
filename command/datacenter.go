@@ -3,23 +3,24 @@ package command
 import (
 	"fmt"
 
-	"github.com/molsbee/clc-cli/api"
+	"github.com/molsbee/clc-cli/service/clc"
 	"github.com/urfave/cli"
 )
 
+// TODO: Update to accept AccountAlias as optional parameter
 // DataCenterCommand Commands related to Data Center functions
-func DataCenterCommand() cli.Command {
+func DataCenterCommand(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:  "datacenter",
 		Usage: "Provide API Functionality for Data Center APIs",
 		Subcommands: []cli.Command{
-			get(),
-			list(),
+			get(api),
+			list(api),
 		},
 	}
 }
 
-func get() cli.Command {
+func get(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:  "details",
 		Usage: "Return Data Center Details",
@@ -29,18 +30,18 @@ func get() cli.Command {
 				return cli.ShowCommandHelp(ctx, "details")
 			}
 
-			fmt.Println(api.DataCenter{Name: name}.Get())
+			fmt.Println(api.GetDataCenter(clc.DataCenterRequest{Name: name}))
 			return nil
 		},
 	}
 }
 
-func list() cli.Command {
+func list(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:  "list",
 		Usage: "Return List of Data Centers with Details",
 		Action: func(ctx *cli.Context) error {
-			fmt.Println(api.DataCenter{}.List())
+			fmt.Println(api.GetDataCenters(clc.DataCenterRequest{}))
 			return nil
 		},
 	}

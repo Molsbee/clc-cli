@@ -4,16 +4,16 @@ import (
 	"fmt"
 
 	"github.com/howeyc/gopass"
-	"github.com/molsbee/clc-cli/authentication"
+	"github.com/molsbee/clc-cli/service/clc"
 	"github.com/urfave/cli"
 )
 
 // Login Commands related to Authenticating with CLC
-func Login() cli.Command {
+func Login(api *clc.API) cli.Command {
 	return cli.Command{
-		Name:  "login",
-		Usage: "Authenticate with CLC V2 API",
-		ArgsUsage: "username",
+		Name:        "login",
+		Usage:       "Authenticate with CLC V2 API",
+		ArgsUsage:   "username",
 		Description: "password will be request in secure prompt",
 		Action: func(ctx *cli.Context) error {
 			username := ctx.Args().Get(0)
@@ -24,7 +24,7 @@ func Login() cli.Command {
 			fmt.Print("Password: ")
 			password, _ := gopass.GetPasswd()
 
-			err := authentication.Authenticate(username, string(password))
+			err := api.Authenticate(username, string(password))
 			if err != nil {
 				fmt.Print(err)
 			}

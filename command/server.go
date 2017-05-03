@@ -3,24 +3,23 @@ package command
 import (
 	"fmt"
 
-	"github.com/molsbee/clc-cli/api"
-	"github.com/molsbee/clc-cli/json"
+	"github.com/molsbee/clc-cli/service/clc"
 	"github.com/urfave/cli"
 )
 
 // ServerCommand Commands related to server functions
-func ServerCommand() cli.Command {
+func ServerCommand(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:  "server",
 		Usage: "Provide API Functionality for Server APIs",
 		Subcommands: []cli.Command{
-			detailsCommand(),
-			credentialsCommand(),
+			detailsCommand(api),
+			credentialsCommand(api),
 		},
 	}
 }
 
-func detailsCommand() cli.Command {
+func detailsCommand(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:  "details",
 		Usage: "Return Server Details",
@@ -30,18 +29,13 @@ func detailsCommand() cli.Command {
 				return cli.ShowCommandHelp(ctx, "details")
 			}
 
-			server := api.Server{
-				Name: serverAlias,
-			}
-
-			details := server.Get()
-			fmt.Println(json.PrettyPrint(details))
+			fmt.Println(api.GetServer(clc.ServerRequest{Name: serverAlias}))
 			return nil
 		},
 	}
 }
 
-func credentialsCommand() cli.Command {
+func credentialsCommand(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:  "credentials",
 		Usage: "Return Server Credentials",
@@ -51,12 +45,7 @@ func credentialsCommand() cli.Command {
 				return cli.ShowCommandHelp(ctx, "credentials")
 			}
 
-			server := api.Server{
-				Name: serverAlias,
-			}
-
-			credentials := server.GetCredentials()
-			fmt.Println(json.PrettyPrint(credentials))
+			fmt.Println(api.GetServerCredentials(clc.ServerRequest{Name: serverAlias}))
 			return nil
 		},
 	}

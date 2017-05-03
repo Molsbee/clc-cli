@@ -1,22 +1,23 @@
 package command
 
 import (
-	"github.com/molsbee/clc-cli/api"
-	"github.com/urfave/cli"
 	"fmt"
+	"github.com/molsbee/clc-cli/service/rdbs"
+	"github.com/urfave/cli"
+	"strconv"
 )
 
-func RdbsCommand() cli.Command {
+func RdbsCommand(rdbs *rdbs.API) cli.Command {
 	return cli.Command{
 		Name:  "rdbs",
 		Usage: "Collection of RDBS APIs",
 		Subcommands: []cli.Command{
-			getSubscription(),
+			getSubscription(rdbs),
 		},
 	}
 }
 
-func getSubscription() cli.Command {
+func getSubscription(api *rdbs.API) cli.Command {
 	return cli.Command{
 		Name:  "subscriptions",
 		Usage: "Returns subscriptions associated to account alias",
@@ -32,23 +33,18 @@ func getSubscription() cli.Command {
 		},
 		Action: func(ctx *cli.Context) error {
 			accountAlias := ctx.String("accountAlias")
-			subscriptionId := ctx.String("subscriptionId")
+			subscriptionIdString := ctx.String("subscriptionId")
 
-			rdbsSubscription := api.RdbsSubscription{
-				BaseRequest: api.BaseRequest{
-					AccountAlias: accountAlias,
-				},
-				SubscriptionId: subscriptionId,
+			subscriptionId, _ := strconv.Atoi(subscriptionIdString)
+			request := rdbs.SubscriptionRequest{
+				AccountAlias:   accountAlias,
+				SubscriptionID: subscriptionId,
 			}
 
-			if subscriptionId != "" {
-				subscription := rdbsSubscription.Get()
-				fmt.Printf("%+v", subscription)
+			if subscriptionIdString != "" {
+				fmt.Println(api.GetSubscription(request))
 			} else {
-				subscriptions := rdbsSubscription.GetAll()
-				for _, subscription := range subscriptions {
-					fmt.Printf("%+v", subscription)
-				}
+				fmt.Println(api.GetSubscriptions(request))
 			}
 
 			return nil

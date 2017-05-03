@@ -1,12 +1,13 @@
 package command
 
 import (
+	"github.com/molsbee/clc-cli/service/clc"
 	"github.com/molsbee/clc-cli/ssh"
 	"github.com/urfave/cli"
 )
 
 // SSHCommand Commands related to creating ssh connection to CLC Server
-func SSHCommand() cli.Command {
+func SSHCommand(api *clc.API) cli.Command {
 	return cli.Command{
 		Name:        "ssh",
 		Usage:       "Connect to CLC Server with SSH",
@@ -17,7 +18,7 @@ func SSHCommand() cli.Command {
 				return cli.ShowCommandHelp(ctx, "ssh")
 			}
 
-			ssh.Connect(serverAlias)
+			ssh.Connect(api, serverAlias)
 			return nil
 		},
 	}
