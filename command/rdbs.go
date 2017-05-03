@@ -44,7 +44,11 @@ func getSubscription(api *rdbs.API) cli.Command {
 			if subscriptionIdString != "" {
 				fmt.Println(api.GetSubscription(request))
 			} else {
-				fmt.Println(api.GetSubscriptions(request))
+				subscriptions := api.GetSubscriptions(request)
+				fmt.Println("Subscriptions")
+				for _, sub := range subscriptions {
+					fmt.Println(sub.FmtString("\t"))
+				}
 			}
 
 			return nil

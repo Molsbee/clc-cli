@@ -2,6 +2,7 @@ package rdbs
 
 import (
 	"bytes"
+	"fmt"
 	"strconv"
 )
 
@@ -29,11 +30,32 @@ type Subscription struct {
 	PendingJobCount      int                  `json:"pendingJobCount"`
 }
 
-func (s Subscription) ToString() {
-	buf := new(bytes.Buffer)
-	buf.WriteString("ID: " + strconv.Itoa(s.ID) + "/n")
-	buf.WriteString("AccountAlias: " + s.AccountAlias + "/n")
+func (s Subscription) String() string {
+	return fmt.Sprint(s.FmtString(""))
+}
 
+func (s Subscription) FmtString(format string) string {
+	buf := new(bytes.Buffer)
+	buf.WriteString(format + "ID:\t" + strconv.Itoa(s.ID) + "\n")
+	buf.WriteString(format + "AccountAlias:\t" + s.AccountAlias + "\n")
+	buf.WriteString(format + "Location:\t" + s.Location + "\n")
+	buf.WriteString(format + "InstanceType:\t" + s.InstanceType + "\n")
+	buf.WriteString(format + "Engine:\t" + s.Engine + "\n")
+	if s.Edition != "" {
+		buf.WriteString(format + "Edition:\t" + s.Edition + "\n")
+	}
+	if s.Version != "" {
+		buf.WriteString(format + "Version:\t" + s.Version + "\n")
+	}
+	buf.WriteString(format + "External ID:\t" + s.ExternalID + "\n")
+	buf.WriteString(format + "Restart Required:\t" + strconv.FormatBool(s.RestartRequired) + "\n")
+	buf.WriteString(format + "BackupTime:\t" + s.BackupTime + "\n")
+	buf.WriteString(format + "Backup Retention Days:\t" + strconv.Itoa(s.BackupRetentionDays) + "\n")
+	buf.WriteString(format + "Servers:\n")
+	for _, server := range s.Servers {
+		buf.WriteString(server.FmtString("\t"))
+	}
+	return fmt.Sprint(buf.String())
 }
 
 type SubscriptionReference struct {
@@ -59,6 +81,26 @@ type Server struct {
 	Storage     int               `json:"storage"`
 	Attributes  map[string]string `json:"attributes"`
 	Connections int               `json:"connections"`
+}
+
+func (se Server) String() string {
+	return fmt.Sprint(se.FmtString(""))
+}
+
+func (se Server) FmtString(format string) string {
+	buf := new(bytes.Buffer)
+	buf.WriteString(format + "ID:\t" + strconv.Itoa(se.ID) + "\n")
+	buf.WriteString(format + "Alias:\t" + se.Alias + "\n")
+	buf.WriteString(format + "Location:\t" + se.Location + "\n")
+	buf.WriteString(format + "CPU:\t" + strconv.Itoa(se.CPU) + "\n")
+	buf.WriteString(format + "Memory:\t" + strconv.Itoa(se.Memory) + "\n")
+	buf.WriteString(format + "Storage:\t" + strconv.Itoa(se.Storage) + "\n")
+	buf.WriteString(format + "Attributes:\n")
+	for key, value := range se.Attributes {
+		buf.WriteString(fmt.Sprintf(format + "\t%s:\t%s\n", key, value))
+	}
+	buf.WriteString(format + "Connections:\t" + strconv.Itoa(se.Connections) + "\n")
+	return fmt.Sprint(buf.String())
 }
 
 type Backup struct {
