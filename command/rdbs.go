@@ -28,7 +28,7 @@ func getSubscription(api *rdbs.API) cli.Command {
 			},
 			cli.StringFlag{
 				Name:  "subscriptionId",
-				Usage: "Subscription ID that needs details",
+				Usage: "subscriptoin id that needs details",
 			},
 		},
 		Action: func(ctx *cli.Context) error {
@@ -42,12 +42,12 @@ func getSubscription(api *rdbs.API) cli.Command {
 			}
 
 			if subscriptionIdString != "" {
-				fmt.Println(api.GetSubscription(request))
+				fmt.Print(api.GetSubscription(request))
 			} else {
 				subscriptions := api.GetSubscriptions(request)
 				fmt.Println("Subscriptions")
 				for _, sub := range subscriptions {
-					fmt.Println(sub.FmtString("\t"))
+					fmt.Print(sub.FmtString("\t"))
 				}
 			}
 
