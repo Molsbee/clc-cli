@@ -6,6 +6,7 @@ import (
 	"github.com/molsbee/clc-cli/service/clc"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -36,7 +37,7 @@ type EnvironmentRequest struct {
 func (e EnvironmentRequest) getBaseURL() string {
 	if e.Environment != "" {
 		for key, value := range RDBS {
-			if key == e.Environment {
+			if strings.ToLower(key) == strings.ToLower(e.Environment) {
 				return value
 			}
 		}

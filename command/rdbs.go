@@ -20,7 +20,8 @@ func RdbsCommand(rdbs *rdbs.API) cli.Command {
 func getSubscription(api *rdbs.API) cli.Command {
 	return cli.Command{
 		Name:  "subscriptions",
-		Usage: "Returns subscriptions associated to account alias",
+		Description: "returns one or more subscriptions based on input",
+		Usage: "optional parameters [--accountAlias {{alias}}] [--subscriptionId {{id}}] [--environment {{ env }}]",
 		Flags: []cli.Flag{
 			cli.StringFlag{
 				Name:  "accountAlias",
@@ -30,15 +31,23 @@ func getSubscription(api *rdbs.API) cli.Command {
 				Name:  "subscriptionId",
 				Usage: "subscriptoin id that needs details",
 			},
+			cli.StringFlag{
+				Name: "environment",
+				Usage: "dev,qa,prod",
+			},
 		},
 		Action: func(ctx *cli.Context) error {
 			accountAlias := ctx.String("accountAlias")
 			subscriptionIdString := ctx.String("subscriptionId")
+			environment := ctx.String("environment")
 
 			subscriptionId, _ := strconv.Atoi(subscriptionIdString)
 			request := rdbs.SubscriptionRequest{
 				AccountAlias:   accountAlias,
 				SubscriptionID: subscriptionId,
+				EnvironmentRequest: rdbs.EnvironmentRequest{
+					Environment: environment,
+				},
 			}
 
 			if subscriptionIdString != "" {

@@ -42,7 +42,7 @@ func (s Subscription) FmtString(format string) string {
 	buf.WriteString(format + "Location:\t\t" + s.Location + "\n")
 	buf.WriteString(format + "Engine:\t\t\t" + s.Engine + "\n")
 	if s.Edition != "" {
-		buf.WriteString(format + "Edition:\t\t\t" + s.Edition + "\n")
+		buf.WriteString(format + "Edition:\t\t" + s.Edition + "\n")
 	}
 	if s.Version != "" {
 		buf.WriteString(format + "Version:\t\t" + s.Version + "\n")
