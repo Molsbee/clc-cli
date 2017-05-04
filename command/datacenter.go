@@ -10,38 +10,51 @@ import (
 // TODO: Update to accept AccountAlias as optional parameter
 // DataCenterCommand Commands related to Data Center functions
 func DataCenterCommand(api *clc.API) cli.Command {
+	flags := []cli.Flag{
+		cli.StringFlag{
+			Name: "accountAlias",
+			Usage: "[clc customer account alias]",
+		},
+	}
+
 	return cli.Command{
 		Name:  "datacenter",
-		Usage: "Provide API Functionality for Data Center APIs",
+		Usage: "command line wrapper for retrieving datacenter data",
 		Subcommands: []cli.Command{
-			get(api),
-			list(api),
+			get(api, flags),
+			list(api, flags),
 		},
 	}
 }
 
-func get(api *clc.API) cli.Command {
+func get(api *clc.API, flags []cli.Flag) cli.Command {
+	comName := "get"
 	return cli.Command{
-		Name:  "details",
-		Usage: "Return Data Center Details",
+		Name:  comName,
+		Usage: "load data center details",
+		Flags: flags,
 		Action: func(ctx *cli.Context) error {
 			name := ctx.Args().Get(0)
 			if name == "" {
-				return cli.ShowCommandHelp(ctx, "details")
+				return cli.ShowCommandHelp(ctx, comName)
 			}
 
-			fmt.Println(api.GetDataCenter(clc.DataCenterRequest{Name: name}))
+			fmt.Print(api.GetDataCenter(clc.DataCenterRequest{
+				Name: name,
+				AccountAlias: ctx.String("accountAlias"),
+			}))
 			return nil
 		},
 	}
 }
 
-func list(api *clc.API) cli.Command {
+func list(api *clc.API, flags []cli.Flag) cli.Command {
 	return cli.Command{
 		Name:  "list",
-		Usage: "Return List of Data Centers with Details",
+		Usage: "load all datacenters",
+		Flags: flags,
 		Action: func(ctx *cli.Context) error {
-			fmt.Println(api.GetDataCenters(clc.DataCenterRequest{}))
+			fmt.Print(api.GetDataCenters(clc.DataCenterRequest{}))
 			return nil
 		},
 	}

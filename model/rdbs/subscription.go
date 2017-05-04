@@ -99,7 +99,7 @@ func (se Server) FmtString(format string) string {
 		}
 	}
 
-	return fmt.Sprintf(format+"Alias: %s IP: %s\n", se.Alias, internalIP)
+	return fmt.Sprintf(format+"Alias: %s\tIP: %s\n", se.Alias, internalIP)
 }
 
 type Backup struct {
@@ -116,7 +116,7 @@ func (b Backup) String() string {
 }
 
 func (b Backup) FmtString(format string) string {
-	return fmt.Sprintf(format+"FileName: %s Status: %s\n", b.FileName, b.Status)
+	return fmt.Sprintf(format+"FileName: %s\tStatus: %s\n", b.FileName, b.Status)
 }
 
 type ConfigurationProfile struct {
