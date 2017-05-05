@@ -7,86 +7,57 @@ import (
 	"github.com/urfave/cli"
 )
 
-const server = "server"
+const GROUP = "group"
 
 // GroupCommand Commands related to Group Functions
 func GroupCommand(api *clc.API) cli.Command {
+	flags := []cli.Flag{
+		cli.StringFlag{
+			Name: "accountAlias",
+			Usage: "[clc customer account alias]",
+		},
+	}
+
 	return cli.Command{
-		Name:  "group",
+		Name:  "groups",
 		Usage: "Provide API Functionality for Group APIs",
 		Subcommands: []cli.Command{
-			details(api),
-			//getGroupServers(clc),
+			details(api, flags),
 		},
 	}
 }
 
-func details(api *clc.API) cli.Command {
+func details(api *clc.API, flags []cli.Flag) cli.Command {
+	comName := "get"
 	return cli.Command{
-		Name:      "details",
+		Name:      comName,
 		Usage:     "Returns details of Data Center Groups",
+		Flags: flags,
 		ArgsUsage: "group id or datacenter name",
 		Action: func(ctx *cli.Context) error {
 			groupID := ctx.Args().Get(0)
 			if groupID == "" {
-				return cli.ShowCommandHelp(ctx, "details")
+				return cli.ShowCommandHelp(ctx, comName)
 			}
 
 			if len(groupID) == 3 {
-				dataCenterDetails := api.GetDataCenter(clc.DataCenterRequest{Name: groupID})
+				dataCenterDetails := api.GetDataCenter(clc.DataCenterRequest{
+					Name: groupID,
+					AccountAlias: ctx.String("accountAlias"),
+				})
 				for _, element := range dataCenterDetails.Links {
-					if element.Rel == "group" {
+					if element.Rel == GROUP {
 						groupID = element.ID
 						break
 					}
 				}
 			}
 
-			fmt.Println(api.GetGroup(clc.GroupRequest{ID: groupID}))
+			fmt.Println(api.GetGroup(clc.GroupRequest{
+				ID: groupID,
+				AccountAlias: ctx.String("accountAlias"),
+			}))
 			return nil
 		},
 	}
 }
-
-//func getGroupServers(clc *clc.API) cli.Command {
-//	return cli.Command{
-//		Name:  "servers",
-//		Usage: "Return Servers within Data Center Group",
-//		Flags: []cli.Flag{
-//			cli.StringFlag{
-//				Name:  "data-center",
-//				Usage: "Data Center Name ex: UC1",
-//			},
-//			cli.StringFlag{
-//				Name:  "group-id",
-//				Usage: "Group ID that needs details",
-//			},
-//		},
-//		Action: func(ctx *cli.Context) error {
-//			groupID := ctx.String("group-id")
-//
-//			dataCenter := ctx.String("data-center")
-//			if dataCenter != "" {
-//				dataCenterDetails := api.DataCenter{Name: dataCenter}
-//				for _, element := range dataCenterDetails.Get().Links {
-//					if element.Rel == "group" {
-//						groupID = element.ID
-//						break
-//					}
-//				}
-//			}
-//
-//			if groupID == "" {
-//				return cli.ShowCommandHelp(ctx, "servers")
-//			}
-//
-//			group := api.Group{
-//				ID: groupID,
-//			}
-//
-//			fmt.Println("Servers")
-//			fmt.Print(group.Get().GetServers())
-//			return nil
-//		},
-//	}
-//}

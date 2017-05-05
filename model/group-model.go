@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"time"
+	"strings"
 )
 
 const server = "server"
@@ -57,13 +58,20 @@ func (g Group) fmtString(s string) string {
 	resp += fmt.Sprintf("%sID:\t\t%s\n", s, g.ID)
 	resp += fmt.Sprintf("%sServer Count:\t%d\n", s, g.ServersCount)
 
-	for _, link := range g.Links {
+	for pos, link := range g.Links {
 		if link.Rel == server {
-			resp += fmt.Sprintf("%s\tID: %s\n", s, link.ID)
+			resp += fmt.Sprintf("%s\t%s", s, link.ID)
+			if pos % 5 == 0 || pos == len(g.Links) - 1 {
+				resp += fmt.Sprintln()
+			}
 		}
 	}
 
 	for _, group := range g.Groups {
+		if strings.ToLower(group.Name) == "trash" {
+			continue
+		}
+
 		resp += fmt.Sprintf("%s", group.fmtString(s+"\t"))
 	}
 
